@@ -1,29 +1,35 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Colors from '@/constants/Colors';
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-      }}>
-      {/* <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          
-        }}
-      /> */}
+        tabBarActiveTintColor: Colors.WHITE,
+        tabBarStyle: {
+          backgroundColor: Colors.BLACK, // Set your custom color here
+        }
+      }}
+    >
       <Tabs.Screen
-        name="explore"
+        name='home'
         options={{
-          title: 'Explore',
-          
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="home-circle-outline" size={30} color={color} />
+          )
+        }}
+      />
+      <Tabs.Screen
+        name='profile'
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome5 name="user-circle" size={24} color={color} />
+          )
         }}
       />
     </Tabs>

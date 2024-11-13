@@ -21,7 +21,7 @@ const Regiter = () => {
                     displayName: userName,
                 });
                 ToastAndroid.show('Account Created Successfully.', ToastAndroid.LONG)
-                router.navigate("/index")
+                router.navigate("./index")
             }
             else {
                 ToastAndroid.show('Null Values Are Not Allowed. ', ToastAndroid.LONG)
