@@ -16,7 +16,7 @@ const Login = () => {
             if (email && password !== null) {
                 const result = await signInWithEmailAndPassword(auth, email, password);
                 ToastAndroid.show('Logged In Successfully.', ToastAndroid.LONG)
-                router.navigate("./index")
+                router.navigate("./(tabs)/home")
             } else {
                 ToastAndroid.show('Null Values Are Not Allowed. ', ToastAndroid.LONG)
             }
