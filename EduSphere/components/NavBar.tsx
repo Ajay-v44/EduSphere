@@ -10,6 +10,7 @@ const NavBar = () => {
         } catch (e) {
             console.error(e);
         }
+        
     };
     return (
         <View className='mt-10'>
