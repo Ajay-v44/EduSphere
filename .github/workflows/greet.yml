@@ -1,0 +1,30 @@
+name: Greet on Pull Request
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Greeting Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { pull_request } = context.payload;
+            const prNumber = pull_request.number;
+            const user = pull_request.user.login;
+
+            const message = `
+            👋 Hello @${user}! Thanks for opening a pull request. We appreciate your contribution. 
+            
+            Please make sure that your code follows the project guidelines and includes proper documentation. 🚀`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: message,
+            });
