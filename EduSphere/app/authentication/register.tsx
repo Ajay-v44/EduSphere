@@ -34,42 +34,42 @@ const Regiter = () => {
         }
     }
     return (
-        <View className='w-full h-full'>
+        <View className='w-full h-full bg-black'>
             <View className='mt-20 m-5'>
-                <Text className='text-5xl font-bold'>Register User</Text>
+                <Text className='text-5xl font-bold text-white'>Register User</Text>
                 <Text className='text-gray-400 font-light'>Enter Your Details to Register</Text>
             </View>
             <View className='m-5'>
                 <View className='m-5'>
                     <View className='ml-5 '>
-                        <AntDesign name="user" className='relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7' size={24} color="black" />
+                        <AntDesign name="user" className='relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-2xl' size={24} color="black" />
                         <TextInput
                             value={userName}
                             onChangeText={setUserName}
-                            className='w-45 h-20 bg-violet-50'
+                            className='w-45 h-20 bg-violet-50 rounded-r-2xl'
                             placeholder='Enter Your Name'
                         />
                     </View>
                 </View>
                 <View className='m-5'>
                     <View className='ml-5 '>
-                        <MaterialCommunityIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7' name="email-fast-outline" size={24} color="black" />
+                        <MaterialCommunityIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-2xl' name="email-fast-outline" size={24} color="black" />
                         <TextInput
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
-                            className='w-45 h-20 bg-violet-50'
+                            className='w-45 h-20 bg-violet-50 rounded-r-2xl'
                             placeholder='Enter Your Email'
                         />
                     </View>
                 </View>
                 <View className='m-5'>
                     <View className='ml-5 '>
-                        <MaterialIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7' name="password" size={24} color="black" />
+                        <MaterialIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-2xl' name="password" size={24} color="black" />
                         <TextInput
                             value={password}
                             onChangeText={setPassword}
-                            className='w-45 h-20 bg-violet-50'
+                            className='w-45 h-20 bg-violet-50 rounded-r-2xl'
                             placeholder='Enter Your Password'
                             secureTextEntry={true}
                         />
@@ -83,10 +83,10 @@ const Regiter = () => {
                     </TouchableOpacity>
                 </View>
                 <View className='mt-3 flex flex-row justify-center'>
-                    <Text className='text-center pr-3'>Already have an account ?</Text>
+                    <Text className='text-center pr-3 text-gray-300'>Already have an account ?</Text>
                     <TouchableOpacity onPress={() => {
                         router.push("/authentication/login")
-                    }} ><Text className='underline'>Login</Text></TouchableOpacity>
+                    }} ><Text className='underline text-green-200'>Login</Text></TouchableOpacity>
                 </View>
             </View>
         </View>

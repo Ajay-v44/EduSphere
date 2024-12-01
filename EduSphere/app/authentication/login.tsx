@@ -27,31 +27,31 @@ const Login = () => {
         }
     }
     return (
-        <View className='w-full h-full'>
+        <View className='w-full h-full bg-black'>
             <View className='mt-20 m-5'>
-                <Text className='text-5xl font-bold'>Log In</Text>
+                <Text className='text-5xl font-bold text-white'>Log In</Text>
                 <Text className='text-gray-400 font-light'>Enter Your Details to Login</Text>
             </View>
             <View className='m-5'>
                 <View className='m-5'>
                     <View className='ml-5 '>
-                        <MaterialCommunityIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7' name="email-fast-outline" size={24} color="black" />
+                        <MaterialCommunityIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-md' name="email-fast-outline" size={24} color="black" />
                         <TextInput
                             value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
-                            className='w-45 h-20 bg-violet-50'
+                            className='w-45 h-20 bg-violet-50 rounded-r-md'
                             placeholder='Enter Your Email'
                         />
                     </View>
                 </View>
                 <View className='m-5'>
                     <View className='ml-5 '>
-                        <MaterialIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7' name="password" size={24} color="black" />
+                        <MaterialIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-md' name="password" size={24} color="black" />
                         <TextInput
                             value={password}
                             onChangeText={setPassword}
-                            className='w-45 h-20 bg-violet-50'
+                            className='w-45 h-20 bg-violet-50 rounded-r-md'
                             placeholder='Enter Your Password'
                             secureTextEntry={true}
                         />
@@ -63,10 +63,10 @@ const Login = () => {
                     </TouchableOpacity>
                 </View>
                 <View className='mt-3 flex flex-row justify-center'>
-                    <Text className='text-center pr-3'>Dont have account ?</Text>
+                    <Text className='text-center pr-3 text-gray-400'>Dont have account ?</Text>
                     <TouchableOpacity onPress={() => {
                         router.push("/authentication/register")
-                    }} ><Text className='underline'>Regiter</Text></TouchableOpacity>
+                    }} ><Text className='underline text-blue-200'>Regiter</Text></TouchableOpacity>
                 </View>
             </View>
         </View>

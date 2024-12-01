@@ -13,7 +13,7 @@ const NavBar = () => {
         
     };
     return (
-        <View className='mt-10'>
+        <View className='mt-3'>
             <View className='m-5 flex flex-row items-center justify-between'>
                 <Text className='text-5xl text-white font-extrabold'>Edusphere</Text>
                     <TouchableOpacity onPress={logout}>
