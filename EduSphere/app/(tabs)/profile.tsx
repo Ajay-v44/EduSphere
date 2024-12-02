@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Entypo from '@expo/vector-icons/Entypo';
+import { router } from 'expo-router';
 const Profile = () => {
   return (
     <View className='bg-black w-full h-full p-5'>
@@ -19,7 +20,7 @@ const Profile = () => {
           <Text className='text-red-300 pt-5 text-justify text-sm '>Love With technolagies</Text>
         </View>
         <View className='mt-10 flex justify-center items-center'>
-          <TouchableOpacity className='flex flex-row justify-between items-center border-t-2 border-t-red-100 border-b-2 border-b-red-100 w-full p-5 m-3'>
+          <TouchableOpacity onPress={() => { router.push("/createarticles/post") }} className='flex flex-row justify-between items-center border-t-2 border-t-red-100 border-b-2 border-b-red-100 w-full p-5 m-3'>
             <MaterialIcons name="post-add" size={24} color="grey" />
             <Text className='text-white '>Create Post</Text>
           </TouchableOpacity>
