@@ -17,7 +17,7 @@ const App = () => {
 
   });
   return (
-    <View className=' w-full h-full text-white'>
+    <View className=' w-full h-full text-white bg-black'>
     </View>
   )
 }
