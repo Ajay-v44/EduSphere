@@ -2,9 +2,19 @@ import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'reac
 import React, { useState } from 'react'
 import Images from '@/constants/Images';
 import * as ImagePicker from 'expo-image-picker';
+import { doc, setDoc } from "firebase/firestore";
+import { uploadImage } from '@/helpers/uploadImage';
 
 const CreatePosts = () => {
     const [image, setImage] = useState<string | null>(null);
+    const [data, setData] = useState({
+        id: new Date().getTime().toString(),
+        title: "",
+        shortDescription: "",
+        description1: "",
+        description2: "",
+        imageUrl: ""
+    })
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images', 'videos'],
@@ -16,8 +26,20 @@ const CreatePosts = () => {
             setImage(result.assets[0].uri);
         }
     };
-    const CreatePost = () => {
+    const CreatePost = async () => {
         try {
+            if (data.title===null || data.shortDescription==null || data.description1==null || image === null) {
+                return alert('Required Data Is Missing')
+            }
+            const response = uploadImage(image);
+            console.log(response)
+            // setData(
+            //     {
+            //         ...data,
+            //         imageUrl: image
+            //     }
+            // )
+
         } catch (error) {
             console.log(error)
         }
@@ -27,8 +49,18 @@ const CreatePosts = () => {
             <View className='flex justify-center items-center'>
                 <Text className='text-white text-2xl'>CreatePosts</Text>
                 <View className='mt-5 w-full flex justify-between items-center gap-4'>
-                    <TextInput className='bg-white text-black rounded-md border-2 border-red-100 w-full' placeholder='Enter Title' />
-                    <TextInput className='bg-white text-black rounded-md border-2 border-red-100 w-full' placeholder='Enter short dsecription' />
+                    <TextInput className='bg-white text-black rounded-md border-2 border-red-100 w-full' placeholder='Enter Title' onChangeText={(value) => {
+                        setData({
+                            ...data,
+                            title: value
+                        })
+                    }} value={data.title} />
+                    <TextInput className='bg-white text-black rounded-md border-2 border-red-100 w-full' placeholder='Enter short dsecription' onChangeText={(value) => {
+                        setData({
+                            ...data,
+                            shortDescription: value
+                        })
+                    }} value={data.shortDescription} />
                 </View>
             </View>
             <View>
@@ -38,6 +70,12 @@ const CreatePosts = () => {
                     placeholder="Enter what's on your mind."
                     style={styles.textArea}
                     textAlignVertical="top"
+                    onChangeText={(value) => {
+                        setData({
+                            ...data,
+                            description1: value
+                        })
+                    }} value={data.description1}
                 />
                 <TextInput
                     multiline={true}
@@ -45,6 +83,12 @@ const CreatePosts = () => {
                     placeholder="Enter what's on your mind."
                     style={styles.textArea}
                     textAlignVertical="top"
+                    onChangeText={(value) => {
+                        setData({
+                            ...data,
+                            description2: value
+                        })
+                    }} value={data.description2}
                 />
             </View>
             <TouchableOpacity onPress={pickImage} className='flex justify-center items-center mt-3 bg-white rounded-md'>

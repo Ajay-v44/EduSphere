@@ -13,7 +13,6 @@ const App = () => {
     if (!user) {
       router.push("/authentication/login")
     } else {
-      console.log("called")
       if (user?.uid !== UserId) {
         userStore.getState().addUserId(UserId)
       }
