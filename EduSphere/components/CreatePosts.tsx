@@ -1,19 +1,25 @@
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import Images from '@/constants/Images';
 import * as ImagePicker from 'expo-image-picker';
-import { doc, setDoc } from "firebase/firestore";
-import { uploadImage } from '@/helpers/uploadImage';
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { uploadToCloudinary } from '@/helpers/uploadToCloudinary';
+import { userStore } from '@/zustand/store';
+import { auth, db } from '@/initialize-firebase';
+import { router } from 'expo-router';
 
 const CreatePosts = () => {
-    const [image, setImage] = useState<string | null>(null);
+    const UserId = userStore((state: any) => (state.userId));
+    const [image, setImage] = useState<string | any>(null);
+    const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState({
         id: new Date().getTime().toString(),
         title: "",
         shortDescription: "",
         description1: "",
         description2: "",
-        imageUrl: ""
+        imageUrl: "",
+        userId: ""
     })
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -23,25 +29,42 @@ const CreatePosts = () => {
             quality: 1,
         });
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            setImage(result.assets[0]);
         }
     };
     const CreatePost = async () => {
         try {
-            if (data.title===null || data.shortDescription==null || data.description1==null || image === null) {
+            if (data.title === "" || data.shortDescription == "" || data.description1 == "" || image === null) {
                 return alert('Required Data Is Missing')
             }
-            const response = uploadImage(image);
+            setLoading(true)
+            const response = await uploadToCloudinary(image);
             console.log(response)
-            // setData(
-            //     {
-            //         ...data,
-            //         imageUrl: image
-            //     }
-            // )
-
+            setData(
+                {
+                    ...data,
+                    imageUrl: response,
+                    userId: UserId,
+                }
+            )
+            console.log(data)
+            await addDoc(collection(db, "posts"), data);
+            setLoading(false)
+            setData({
+                id: new Date().getTime().toString(),
+                title: "",
+                shortDescription: "",
+                description1: "",
+                description2: "",
+                imageUrl: "",
+                userId: ""
+            })
+            setImage(null)
+            router.push("/(tabs)/home")
+            ToastAndroid.show('Post Created Sucessfully', ToastAndroid.LONG)
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
     }
     return (
@@ -92,10 +115,12 @@ const CreatePosts = () => {
                 />
             </View>
             <TouchableOpacity onPress={pickImage} className='flex justify-center items-center mt-3 bg-white rounded-md'>
-                <Image source={{ uri: image ? image : Images.ImageUrl }} width={150} height={150} />
+                <Image source={{ uri: image ? image.uri : Images.ImageUrl }} width={150} height={150} />
             </TouchableOpacity >
-            <TouchableOpacity onPress={CreatePost} className='bg-green-300 mt-2 h-20 flex justify-center items-center rounded-lg border-2 border-white'>
-                <Text className='text-center text-white font-bold'>Create Post</Text>
+            <TouchableOpacity onPress={CreatePost} className='bg-green-300 mt-2 h-20 flex justify-center items-center rounded-lg border-2 border-white' disabled={loading}>
+                {loading ? <ActivityIndicator /> :
+                    <Text className='text-center text-white font-bold'>Create Post</Text>
+                }
             </TouchableOpacity>
         </View>
     )

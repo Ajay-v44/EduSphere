@@ -14,10 +14,11 @@ const App = () => {
       router.push("/authentication/login")
     } else {
       if (user?.uid !== UserId) {
-        userStore.getState().addUserId(UserId)
+        userStore.getState().addUserId(String(user?.uid))
       }
       router.push('./(tabs)/home')
     }
+    
   });
   return (
     <View className=' w-full h-full text-white bg-black'>
