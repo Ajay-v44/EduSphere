@@ -18,8 +18,7 @@ const CreatePosts = () => {
         shortDescription: "",
         description1: "",
         description2: "",
-        imageUrl: "",
-        userId: ""
+        imageUrl: ""
     })
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -39,17 +38,12 @@ const CreatePosts = () => {
             }
             setLoading(true)
             const response = await uploadToCloudinary(image);
-            console.log(response)
-            setData(
-                {
-                    ...data,
-                    imageUrl: response,
-                    userId: UserId,
-                }
-            )
-            console.log(data)
-            await addDoc(collection(db, "posts"), data);
-            setLoading(false)
+            const Data = {
+                ...data,
+                imageUrl: response,
+                userId: UserId
+            }
+            await addDoc(collection(db, "posts"), Data);
             setData({
                 id: new Date().getTime().toString(),
                 title: "",
@@ -57,9 +51,9 @@ const CreatePosts = () => {
                 description1: "",
                 description2: "",
                 imageUrl: "",
-                userId: ""
             })
             setImage(null)
+            setLoading(false)
             router.push("/(tabs)/home")
             ToastAndroid.show('Post Created Sucessfully', ToastAndroid.LONG)
         } catch (error) {

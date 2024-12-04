@@ -7,16 +7,16 @@ import { auth } from '@/initialize-firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 const Login = () => {
     const router = useRouter()
-    const [email, setEmail] = useState<string | null>()
-    const [password, setPassword] = useState<string | null>();
+    const [email, setEmail] = useState<string>()
+    const [password, setPassword] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false)
     const handleLogin = async () => {
         try {
             setLoading(true)
             if (email && password !== null) {
                 const result = await signInWithEmailAndPassword(auth, email, String(password));
-                setEmail(null)
-                setPassword(null)
+                setEmail('')
+                setPassword('')
                 ToastAndroid.show('Logged In Successfully.', ToastAndroid.LONG)
                 router.navigate("./(tabs)/home")
             } else {
@@ -39,7 +39,7 @@ const Login = () => {
                     <View className='ml-5 '>
                         <MaterialCommunityIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-md' name="email-fast-outline" size={24} color="black" />
                         <TextInput
-                            value={String(email)}
+                            value={email}
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             className='w-45 h-20 bg-violet-50 rounded-r-md'
@@ -51,7 +51,7 @@ const Login = () => {
                     <View className='ml-5 '>
                         <MaterialIcons className=' relative top-20 right-10 h-20 w-10 text-center bg-red-300 pt-7 rounded-l-md' name="password" size={24} color="black" />
                         <TextInput
-                            value={String(password)}
+                            value={password}
                             onChangeText={setPassword}
                             className='w-45 h-20 bg-violet-50 rounded-r-md'
                             placeholder='Enter Your Password'
