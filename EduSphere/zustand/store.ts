@@ -2,12 +2,14 @@ import { create } from "zustand";
 
 interface UserStoreState {
   userId: string | null;
-  addUserId: (iD: string) => void;
+  userName:string|null;
+  addUserId: (iD: string,name:string) => void;
   removeUserId: () => void;
 }
 
 export const userStore = create<UserStoreState>((set) => ({
   userId: null,
-  addUserId: (iD) => set({ userId: iD }),
+  userName:null,
+  addUserId: (iD:string,name:string) => set({ userId: iD,userName:name }),
   removeUserId: () => set({ userId: null }),
 }));

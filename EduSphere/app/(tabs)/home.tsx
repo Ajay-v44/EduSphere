@@ -1,47 +1,45 @@
-import { View, Text, FlatList, ScrollView, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, FlatList, ScrollView, StyleSheet, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import NavBar from '@/components/NavBar'
 import PostCard from '@/components/PostCard'
-
+import { collection, getDocs } from 'firebase/firestore'
+import { db } from '@/initialize-firebase'
 
 const Home = () => {
-    const items = [{
-        id: 1,
-        tittle: "testing",
-        shortDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque asperiores cum dicta reiciendis iste sint voluptas ab fuga veritatis aperiam. Tempore provident nam quaerat sed itaque error ducimus vel ea!",
-        imageUrl: "https://smiletutor.sg/wp-content/uploads/2020/12/AdobeStock_292618444-scaled.jpeg"
-    }, {
-        id: 2,
-        tittle: "testing",
-        shortDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque asperiores cum dicta reiciendis iste sint voluptas ab fuga veritatis aperiam. Tempore provident nam quaerat sed itaque error ducimus vel ea!",
-        imageUrl: "https://smiletutor.sg/wp-content/uploads/2020/12/AdobeStock_292618444-scaled.jpeg"
-    }, {
-        id: 3,
-        tittle: "testing",
-        shortDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque asperiores cum dicta reiciendis iste sint voluptas ab fuga veritatis aperiam. Tempore provident nam quaerat sed itaque error ducimus vel ea!",
-        imageUrl: "https://smiletutor.sg/wp-content/uploads/2020/12/AdobeStock_292618444-scaled.jpeg"
-    }, {
-        id: 4,
-        tittle: "testing",
-        shortDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque asperiores cum dicta reiciendis iste sint voluptas ab fuga veritatis aperiam. Tempore provident nam quaerat sed itaque error ducimus vel ea!",
-        imageUrl: "https://smiletutor.sg/wp-content/uploads/2020/12/AdobeStock_292618444-scaled.jpeg"
-    }, {
-        id: 5,
-        tittle: "testing",
-        shortDescription: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque asperiores cum dicta reiciendis iste sint voluptas ab fuga veritatis aperiam. Tempore provident nam quaerat sed itaque error ducimus vel ea!",
-        imageUrl: "https://smiletutor.sg/wp-content/uploads/2020/12/AdobeStock_292618444-scaled.jpeg"
-    }]
+    const [posts, setPosts] = useState<any>([])
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const querySnapshot = await getDocs(collection(db, "posts"));
+                const posts = querySnapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
+                setPosts(posts)
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        fetchPost();
+    }, [])
+
     return (
         <View className='w-full h-full bg-black'>
             <NavBar />
             <Text className="text-red-600 px-10 text-2xl md:text-3xl lg:text-4xl ">Posts</Text>
             <View className=' mt-5 flex justify-center items-center'>
-                <FlatList
-                    data={items}
-                    renderItem={({ item }) => {
-                        return <PostCard key={item.id} items={item} />
-                    }}
-                />
+                {posts.length === 0 ?
+                    <View className='bg-white rounded-full m-10'>
+                        <Image source={require('../../assets/images/no-posts.png')} className='max-w-lg'/>
+                    </View>
+                    :
+                    <FlatList
+                        data={posts}
+                        renderItem={({ item }) => {
+                            return <PostCard key={item.id} items={item} />
+                        }}
+                    />
+                }
             </View>
         </View>
     )

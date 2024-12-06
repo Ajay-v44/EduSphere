@@ -7,9 +7,11 @@ import { uploadToCloudinary } from '@/helpers/uploadToCloudinary';
 import { userStore } from '@/zustand/store';
 import { auth, db } from '@/initialize-firebase';
 import { router } from 'expo-router';
+import { formatDate } from '@/helpers/getFormatedDate';
 
 const CreatePosts = () => {
     const UserId = userStore((state: any) => (state.userId));
+    const UserName = userStore((state: any) => (state.userName))
     const [image, setImage] = useState<string | any>(null);
     const [loading, setLoading] = useState<boolean>(false)
     const [data, setData] = useState({
@@ -38,10 +40,14 @@ const CreatePosts = () => {
             }
             setLoading(true)
             const response = await uploadToCloudinary(image);
+            const date = formatDate()
             const Data = {
                 ...data,
                 imageUrl: response,
-                userId: UserId
+                userId: UserId,
+                createdBy: UserName,
+                createdAt: date
+
             }
             await addDoc(collection(db, "posts"), Data);
             setData({

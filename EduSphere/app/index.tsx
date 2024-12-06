@@ -14,7 +14,7 @@ const App = () => {
       router.push("/authentication/login")
     } else {
       if (user?.uid !== UserId) {
-        userStore.getState().addUserId(String(user?.uid))
+        userStore.getState().addUserId(String(user?.uid),String(user?.displayName))
       }
       router.push('./(tabs)/home')
     }
