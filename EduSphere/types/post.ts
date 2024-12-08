@@ -1,4 +1,5 @@
 export type Posts = {
+  fid?:string;
   id: string;
   title: string;
   shortDescription: string;
