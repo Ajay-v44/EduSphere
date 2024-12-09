@@ -24,9 +24,9 @@ const Profile = () => {
             <MaterialIcons name="post-add" size={24} color="grey" />
             <Text className='text-white '>Create Post</Text>
           </TouchableOpacity>
-          <TouchableOpacity className='flex flex-row justify-between items-center border-t-2 border-t-red-100 border-b-2 border-b-red-100 w-full p-5 m-3'>
+          <TouchableOpacity onPress={() => { router.push("/viewarticles/viewposts") }} className='flex flex-row justify-between items-center border-t-2 border-t-red-100 border-b-2 border-b-red-100 w-full p-5 m-3'>
             <Ionicons name="image-outline" size={24} color="grey" />
-            <Text className='text-white '>View Post</Text>
+            <Text className='text-white '>View My Posts</Text>
           </TouchableOpacity>
           <TouchableOpacity className='flex flex-row justify-between items-center border-t-2 border-t-red-100 border-b-2 border-b-red-100 w-full p-5 m-3'>
             <MaterialIcons name="add-alarm" size={24} color="grey" />
