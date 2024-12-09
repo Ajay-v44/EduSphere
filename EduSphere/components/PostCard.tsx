@@ -1,9 +1,12 @@
-import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
-import { Link, usePathname } from 'expo-router';
+import { Link, router, usePathname } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Posts } from '@/types/post';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { collection, deleteDoc, getDocs, query, where, doc as getDocRef } from 'firebase/firestore';
+import { db } from '@/initialize-firebase';
+import { deleteFromClodinary } from '@/helpers/deleteFromClodinary';
 // Props interface
 interface PostCardProps {
   items: Posts;
@@ -23,8 +26,38 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
             style: 'cancel',
           },
           {
-            text: 'OK', onPress: () => {
+            text: 'OK', onPress: async () => {
               setLoading(true)
+              const postsCollection = collection(db, "posts"); // Reference to the 'posts' collection 
+              const q = query(postsCollection, where("id", "==", items.id)); // Query to match the inner 'id'
+              const querySnapshot = await getDocs(q);
+              if (!querySnapshot.empty) {
+                const docSnapshot = querySnapshot.docs[0]; // Get the first document (if multiple exist)
+                const docData = docSnapshot.data();
+                let response
+                // delte cloudinary image
+                const imageUrl = docData.imageUrl;
+                if (imageUrl) {
+                  const publicId = imageUrl
+                    .split("/")
+                    .slice(-2) // Get the last two segments (folder name and file name)
+                    .join("/")
+                    .split(".")[0]; // Remove the file extension
+                  console.log(`Extracted Cloudinary Public ID: ${publicId}`);
+                  response = await deleteFromClodinary(publicId)
+                }
+                if (response) {
+                  const docRef = getDocRef(db, "posts", docSnapshot.id); // Create a document reference using its ID
+                  await deleteDoc(docRef); // Delete the document
+                  ToastAndroid.show(`Post deleted successfully.`, ToastAndroid.LONG);
+                  setLoading(false)
+                  router.push("/viewarticles/viewposts")
+                }
+                setLoading(false)
+                throw new Error('Something Went Wrong');
+              } else {
+                ToastAndroid.show("No matching Post found.", ToastAndroid.SHORT);
+              }
             }
           },
         ],
@@ -32,6 +65,7 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
       );
     } catch (err) {
       console.log(err)
+      setLoading(false)
     } finally {
       setLoading(false)
     }
@@ -40,9 +74,13 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
     <View className='border-2 max-w-[25rem] border-white rounded-md  m-3  mb-10'>
       <View className='flex  flex-row justify-between'>
         {pathname === "/viewarticles/viewposts" &&
-          <TouchableOpacity onPress={deleteItem}>
-            <MaterialCommunityIcons name="delete-variant" size={24} color="red" />
-          </TouchableOpacity>
+          <>
+            {loading ? <ActivityIndicator /> :
+              <TouchableOpacity onPress={deleteItem}>
+                <MaterialCommunityIcons name="delete-variant" size={24} color="red" />
+              </TouchableOpacity>
+            }
+          </>
         }
         <Link href={{
           pathname: '/post/[id]',
