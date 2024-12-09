@@ -7,20 +7,22 @@ import { auth } from '@/initialize-firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 const Login = () => {
     const router = useRouter()
-    const [email, setEmail] = useState<string | null>()
-    const [password, setPassword] = useState<string | null>();
+    const [email, setEmail] = useState<string>()
+    const [password, setPassword] = useState<string>();
     const [loading, setLoading] = useState<boolean>(false)
     const handleLogin = async () => {
         try {
             setLoading(true)
             if (email && password !== null) {
-                const result = await signInWithEmailAndPassword(auth, email, password);
+                const result = await signInWithEmailAndPassword(auth, email, String(password));
+                setEmail('')
+                setPassword('')
                 ToastAndroid.show('Logged In Successfully.', ToastAndroid.LONG)
                 router.navigate("./(tabs)/home")
             } else {
                 ToastAndroid.show('Null Values Are Not Allowed. ', ToastAndroid.LONG)
             }
-        } catch (err) {
+        } catch (err: any) {
             alert(JSON.stringify(err?.code))
         } finally {
             setLoading(false)
