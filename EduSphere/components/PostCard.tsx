@@ -6,7 +6,8 @@ import { Posts } from '@/types/post';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { collection, deleteDoc, getDocs, query, where, doc as getDocRef } from 'firebase/firestore';
 import { db } from '@/initialize-firebase';
-import { deleteFromClodinary } from '@/helpers/deleteFromClodinary';
+import { deleteFromCloudinary } from '@/helpers/deleteFromClodinary';
+
 // Props interface
 interface PostCardProps {
   items: Posts;
@@ -34,7 +35,7 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
               if (!querySnapshot.empty) {
                 const docSnapshot = querySnapshot.docs[0]; // Get the first document (if multiple exist)
                 const docData = docSnapshot.data();
-                let response
+                let response = true
                 // delte cloudinary image
                 const imageUrl = docData.imageUrl;
                 if (imageUrl) {
@@ -44,7 +45,7 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
                     .join("/")
                     .split(".")[0]; // Remove the file extension
                   console.log(`Extracted Cloudinary Public ID: ${publicId}`);
-                  response = await deleteFromClodinary(publicId)
+                  // response = await deleteFromCloudinary(publicId)
                 }
                 if (response) {
                   const docRef = getDocRef(db, "posts", docSnapshot.id); // Create a document reference using its ID
@@ -80,6 +81,12 @@ const PostCard: React.FC<PostCardProps> = ({ items }) => {
                 <MaterialCommunityIcons name="delete-variant" size={24} color="red" />
               </TouchableOpacity>
             }
+            <Link href={{
+              pathname: '/editarticles/[id]',
+              params: { id: `${items.id}` }
+            }}>
+              <MaterialCommunityIcons name="circle-edit-outline" size={24} color="orange" />
+            </Link>
           </>
         }
         <Link href={{
